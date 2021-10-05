@@ -5,6 +5,24 @@
 header("location: login.php");
 
 endif; ?>
+<?php
+$queries = new queries();
+$queries->query("SELECT * FROM users WHERE id = {$_SESSION['userId']}");
+if($queries->count() > 0){
+  $result= $queries->fetch();
+}
+if(isset($_REQUEST['submit'])){
+  $fname = $_GET['fname'] ?? "";
+  $lname = $_GET['lname'] ?? "";
+  $address = $_GET['address'] ?? "";
+  $city = $_GET['city'] ?? "";
+  $country = $_GET['country'] ?? "";
+  $postal_code = $_GET['postal_code'] ?? "";
+  $about = $_GET['about'] ?? "";
+  $queries->query("UPDATE users SET f_name = '$fname', l_name='$lname', address='$address', city='$city', country='$country', postal_code='$postal_code', about='$about' WHERE id = {$_SESSION['userId']}");
+  header("location:{$_SERVER['PHP_SELF']}");
+}
+?>
 
 
 
@@ -295,13 +313,13 @@ endif; ?>
                       <div style="padding-left:50px;"  class="col-md-3">
                         <div class="form-group">
                           <label class="bmd-label-floating">Username</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" readonly value="<?php echo $result->fullName;?>">
                         </div>
                       </div>
                       <div style="padding-left:50px;"  class="col-md-4">
                         <div class="form-group">
                           <label class="bmd-label-floating">Email address</label>
-                          <input type="email" class="form-control">
+                          <input type="email" class="form-control" value="<?php echo $result->email;?>">
                         </div>
                       </div>
                     </div>
@@ -309,15 +327,22 @@ endif; ?>
                       <div style="padding-left:50px;" class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">First Name</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" name="fname" value="<?php echo $result->f_name;?>">
+                        </div>
+                      </div>
+                      <div style="padding-left:50px;" class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Last Name</label>
+                          <input type="text" class="form-control" name="lname" value="<?php echo $result->l_name;?>">
                         </div>
                       </div>
                     </div>
+
                     <div class="row">
                       <div style="padding-left:50px;"  class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Adress</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" name="address" value="<?php echo $result->address;?>">
                         </div>
                       </div>
                     </div>
@@ -325,13 +350,13 @@ endif; ?>
                       <div style="padding-left:50px;"  class="col-md-4">
                         <div class="form-group">
                           <label class="bmd-label-floating">City</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" name="city" value="<?php echo $result->city;?>">
                         </div>
                       </div>
                       <div style="padding-left:50px;"  class="col-md-4">
                         <div class="form-group">
                           <label class="bmd-label-floating">Country</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" name="country" value="<?php echo $result->country;?>">
                          <!--<select name="country" class="form-control" id="country">
                           <option value="" selected="selected">choose</option>
                           <option value="AF">Afganistan</option>
@@ -587,7 +612,7 @@ endif; ?>
                       <div style="padding-left:50px;"  class="col-md-4">
                         <div class="form-group">
                           <label class="bmd-label-floating">Postal Code</label>
-                          <input type="text" class="form-control">
+                          <input type="text" class="form-control" name="postal_code" value="<?php echo $result->postal_code;?>">
                         </div>
                       </div>
                     </div>
@@ -596,13 +621,13 @@ endif; ?>
                         <div class="form-group">
                           <label>About Me</label>
                           <div class="form-group">
-                            <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                            <textarea class="form-control" rows="5"></textarea>
+                            <label class="bmd-label-floating"></label>
+                            <textarea class="form-control" rows="5" name="about"><?php echo $result->about;?></textarea>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button style="background-color:#00cae3;" type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                    <button style="background-color:#00cae3;" type="submit" name="submit" class="btn btn-primary pull-right">Update Profile</button>
                     <div class="clearfix"></div>
                   </form>
                 </div>

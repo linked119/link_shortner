@@ -1,7 +1,6 @@
 <!--Shorten for you v1.2-->
 <?php session_start();?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
